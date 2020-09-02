@@ -2,7 +2,7 @@
 # howold -- given a date in the form month/day/year, calculate how old
 #     are you in years, months and days.
 
-# If you are on Linux, this should only be `which date`
+# If you are on Linux, this should only be 'which date'
 # If you are on OS X, install coreutils with brew or from source for gdate
 date="`which date`"  
 
@@ -59,33 +59,36 @@ fi
 dayofyear=$($date +%j) # that's easy!
 dayofbirthday=$($date --date="$startyear-$startmon-$startday" +%j)
 
+## In order to perform arithmetic with 0-prefixed numbers (e.g. 09, $thismon)
+## you need to tell bash to use base-10 by specifying 10#
+
 ### FIRST, NUMBER OF YEARS
 if [ $dayofyear -lt $dayofbirthday ] ; then
-  numberOfYears=$(( $thisyear - $startyear -1 ))
+  numberOfYears=$(( 10#$thisyear - $startyear -1 ))
   flag=1  # will be useful for calculate number of months
 else
-  numberOfYears=$(( $thisyear - $startyear ))
+  numberOfYears=$(( 10#$thisyear - $startyear ))
   flag=0
 fi
 
 ### SECOND, NUMBER OF MONTHS
 if [ $flag -eq 1 ] ; then
-  numberOfMonths=$(( 12 - $startmon + $thismon ))
+  numberOfMonths=$(( 12 - $startmon + 10#$thismon ))
 else
   if [ $thisday -lt $startday ] ; then
-    numberOfMonths=$(( $thismon - $startmon - 1 ))
+    numberOfMonths=$(( 10#$thismon - $startmon - 1 ))
   else
-    numberOfMonths=$(( $thismon - $startmon ))
+    numberOfMonths=$(( 10#$thismon - $startmon ))
   fi
 fi
 
 ### THIRD, NUMBER OF DAYS
 if [ $thisday -gt $startday ] ; then
-  numberOfDays=$(( $thisday - $startday ))
+  numberOfDays=$(( 10#$thisday - $startday ))
 else
-  daysInMonth $(( $thismon - 1 ))  # override dim...
+  daysInMonth $(( 10#$thismon - 1 ))  # override dim...
   extraDays=$(( $dim - $startday ))  # to check the remaining days in the month of birth
-  numberOfDays=$(( $thisday + $extraDays ))
+  numberOfDays=$(( 10#$thisday + $extraDays ))
 fi
 
 ### NOW ADD IT ALL UP
