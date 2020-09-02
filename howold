@@ -74,6 +74,9 @@ fi
 ### SECOND, NUMBER OF MONTHS
 if [ $flag -eq 1 ] ; then
   numberOfMonths=$(( 12 - $startmon + 10#$thismon ))
+  if [ $thisday -lt $startday ] ; then
+    numberOfMonths=$(( $numberOfMonths - 1 ))
+  fi
 else
   if [ $thisday -lt $startday ] ; then
     numberOfMonths=$(( 10#$thismon - $startmon - 1 ))
