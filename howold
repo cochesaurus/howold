@@ -86,7 +86,7 @@ else
 fi
 
 ### THIRD, NUMBER OF DAYS
-if [ $thisday -gt $startday ] ; then
+if [ $thisday -gt $startday -o $thisday -eq $startday ] ; then
   numberOfDays=$(( 10#$thisday - $startday ))
 else
   daysInMonth $(( 10#$thismon - 1 ))  # override dim...
